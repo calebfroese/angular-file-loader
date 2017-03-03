@@ -2,7 +2,13 @@
 import * as vscode from 'vscode';
 import {TextDocument, Uri} from 'vscode';
 
-let angularExtensions: string[] = ['ts', 'html', 'css', 'scss'];
+// an array of the extensions to open
+let extensionsToOpenConf =
+    vscode.workspace.getConfiguration('angularFileLoader')
+        .get<string[]>('extensionsToOpen');
+let extensionsToOpen: string[] =
+    extensionsToOpenConf || ['html', 'ts', 'scss', 'css'];
+
 export function activate(context: vscode.ExtensionContext) {
   let cmdOpen =
       vscode.commands.registerCommand('angularFileLoader.open', () => {
@@ -17,7 +23,7 @@ export function getPath(file: TextDocument) {
   // Get the file extension
   let ext = file.fileName.split('.').pop();
   // If the extension is not in the specified files to open, return
-  if (angularExtensions.indexOf(ext) === -1) {
+  if (extensionsToOpen.indexOf(ext) === -1) {
     return;
   }
   // Path in which similar named files will be named e.g.
@@ -31,7 +37,7 @@ export function openRelevantFiles(fileString: string) {
   // extensions
   vscode.workspace.findFiles(fileString).then((files: Uri[]) => {
     files.forEach((f: Uri) => {
-      if (angularExtensions.indexOf(f.path.split('.').pop()) !== -1) {
+      if (extensionsToOpen.indexOf(f.path.split('.').pop()) !== -1) {
         openFile(f);
       }
     });

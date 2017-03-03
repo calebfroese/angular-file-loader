@@ -39,5 +39,18 @@
         "typescript": "^2.0.3",
         "vscode": "^1.0.0",
         "@types/node": "^6.0.40"
+    },
+    "configuration": {
+        "title": "Configuration of angular file loader",
+        "properties": {
+            "angularFileLoader.extensionsToOpen": {
+                "type": "array",
+                "items": {
+                    "type": "string"
+                },
+                "uniqueItems": true,
+                "description": "An array of relevant file extensions to open"
+            }
+        }
     }
 }
