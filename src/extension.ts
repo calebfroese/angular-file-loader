@@ -1,11 +1,7 @@
 'use strict';
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
 import {TextDocument, Uri} from 'vscode';
 
-// this method is called when your extension is activated
-// your extension is activated the very first time the command is executed
 let angularExtensions: string[] = ['ts', 'html', 'css', 'scss'];
 export function activate(context: vscode.ExtensionContext) {
   vscode.workspace.onDidOpenTextDocument(
@@ -20,25 +16,31 @@ export function activate(context: vscode.ExtensionContext) {
 }
 
 export function openRelevantFiles(file: TextDocument) {
-  // get the extension
+  // Get the file extension
   let ext = file.fileName.split('.').pop();
-  // if the extension is not in the specified files to open, return
+  // If the extension is not in the specified files to open, return
   if (angularExtensions.indexOf(ext) === -1) {
     return;
   }
+  // Path in which similar named files will be named e.g.
+  // `/src/app/home/home.component.*` if `home.component.ts` is opened
   let relatedFiles =
       file.fileName.substr(0, file.fileName.length - ext.length) + '*';
+  // The file path relevant to the workspace
   let relativeRelatedFiles = vscode.workspace.asRelativePath(relatedFiles);
-  console.log(relativeRelatedFiles)
+  // Iterate through relevant files and open them if they are within the set
+  // extensions
   vscode.workspace.findFiles(relativeRelatedFiles).then((files: Uri[]) => {
     files.forEach((f: Uri) => {
       if (angularExtensions.indexOf(f.path.split('.').pop()) !== -1) {
-        vscode.workspace.openTextDocument(f).then((document: TextDocument) => {
-          vscode.window.showTextDocument(document).then(() => {
-            console.log('FILE OPENED!', f.fsPath);
-          });
-        })
+        openFile(f);
       }
     });
+  })
+}
+export function openFile(uri: Uri) {
+  // opens a file by its uri to the window
+  vscode.workspace.openTextDocument(uri).then((document: TextDocument) => {
+    vscode.window.showTextDocument(document);
   })
 }
