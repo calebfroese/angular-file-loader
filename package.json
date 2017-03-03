@@ -22,6 +22,12 @@
                 "command": "angularFileLoader.open",
                 "title": "Open relevant angular files"
             }
+        ],
+        "keybindings": [
+            {
+                "command": "angularFileLoader.open",
+                "key": "cmd+shift+j"
+            }
         ]
     },
     "scripts": {
