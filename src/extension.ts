@@ -14,10 +14,8 @@ export function activate(context: vscode.ExtensionContext) {
 }
 
 export function getPath(file: TextDocument) {
-  console.log('file:', file);
   // Get the file extension
   let ext = file.fileName.split('.').pop();
-  console.log('ext', ext);
   // If the extension is not in the specified files to open, return
   if (angularExtensions.indexOf(ext) === -1) {
     return;
